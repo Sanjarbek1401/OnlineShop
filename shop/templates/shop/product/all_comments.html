@@ -1,0 +1,17 @@
+{% extends "shop/base.html" %}
+{% block content %}
+    <div class="all-comments">
+        <h1>Barcha izohlar: {{ product.name }}</h1>
+        <div class="comments">
+            {% for comment in comments %}
+                <div class="comment">
+                    <strong>{{ comment.full_name }}</strong>
+                    <p>{{ comment.message }}</p>
+                    <small>{{ comment.created }}</small>
+                </div>
+            {% empty %}
+                <p>Izohlar mavjud emas.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

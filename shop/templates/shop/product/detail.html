@@ -4,21 +4,93 @@
     {{ product.name }}
 {% endblock %}
 {% block content %}
+    <style>
+        .rating {
+            font-size: 20px; /* Yulduzlar o'lchamini o'zgartirish */
+            color: gold; /* Yulduzlar rangini o'zgartirish */
+        }
+
+        .star {
+            margin-right: 2px; /* Yulduzlar orasidagi bo'shliq */
+        }
+
+        .star.filled {
+            color: gold; /* To'ldirilgan yulduz rangini o'zgartirish */
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: grey;
+        }
+
+        .discounted-price {
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+
     <div class="product-detail">
-        <img src="{% if product.image %}{{ product.image.url }}{% else %}
-    {% static "img/no_image.png" %}{% endif %}">
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
         <h1>{{ product.name }}</h1>
         <h2>
             <a href="{{ product.category.get_absolute_url }}">
                 {{ product.category }}
             </a>
         </h2>
-        <p class="price">${{ product.price }}</p>
-        <form action="{% url "cart:cart_add" product.id %}" method="post">
+
+        <!-- Chegirma bilan narxni ko'rsatish -->
+        <p class="price">
+            {% if product.discount > 0 %}
+                <span class="old-price">${{ product.price }}</span><br>
+                <span class="discounted-price">Now: ${{ product.discount_priced }}</span>
+            {% else %}
+                ${{ product.price }}
+            {% endif %}
+        </p>
+
+        <!-- Reyting ko'rsatish -->
+        <div class="product-rating">
+            <h3>Reyting:</h3>
+            <div class="rating">
+                {% for i in "*****" %}
+                    {% if forloop.counter <= product.rating %}
+                        <span class="star filled">★</span>
+                    {% else %}
+                        <span class="star">☆</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <form action="{% url 'cart:cart_add' product.id %}" method="post">
             {{ cart_product_form }}
             {% csrf_token %}
             <input type="submit" value="Add to cart">
         </form>
         {{ product.description|linebreaks }}
+    </div>
+
+    <!-- Izohlar qismini qo'shish -->
+    <div class="comments-section">
+        <h2>Comments ({{ total_comments }})</h2>
+        {% for comment in comments %}
+            <div class="comment">
+                <p><strong>{{ comment.full_name }}:</strong> {{ comment.message }}</p>
+                <p><small>Posted on: {{ comment.created|date:"Y-m-d H:i" }}</small></p>
+            </div>
+        {% empty %}
+            <p>No comments yet. Be the first to comment!</p>
+        {% endfor %}
+        <a href="#all-comments">See all comments</a>
+    </div>
+
+    <!-- Yangi izoh qoldirish formasi -->
+    <div class="comment-form">
+        <h3>Leave a Comment</h3>
+        <form method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <button type="submit">Submit</button>
+        </form>
     </div>
 {% endblock %}

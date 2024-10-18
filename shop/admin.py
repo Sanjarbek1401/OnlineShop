@@ -1,6 +1,7 @@
 from django.contrib import admin
+from .models import Category, Product, Comment
 
-from . models import Category,Product
+admin.site.register(Comment)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -10,8 +11,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug','price','available','created','updated')
+    list_display = ('name', 'slug', 'price','discount', 'available', 'rating', 'created', 'updated')
     search_fields = ('name',)
-    list_filter = ('available','created','updated')
-    list_editable = ('available','available')
+    list_filter = ('available', 'created', 'updated')
+    list_editable = ('available', 'price', 'discount','rating')
     prepopulated_fields = {"slug": ("name",)}
