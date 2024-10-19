@@ -30,7 +30,7 @@
     </style>
 
     <div class="product-detail">
-        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" alt="{{ product.name }}">
         <h1>{{ product.name }}</h1>
         <h2>
             <a href="{{ product.category.get_absolute_url }}">
@@ -65,7 +65,8 @@
         <form action="{% url 'cart:cart_add' product.id %}" method="post">
             {{ cart_product_form }}
             {% csrf_token %}
-            <input type="submit" value="Add to cart">
+            <button type="submit" class="btn btn-success">Add to cart</button>
+
         </form>
         {{ product.description|linebreaks }}
     </div>
@@ -81,16 +82,18 @@
         {% empty %}
             <p>No comments yet. Be the first to comment!</p>
         {% endfor %}
-        <a href="#all-comments">See all comments</a>
+        <!-- To'g'ri URL qo'llanildi -->
+        <a href="{% url 'shop:all_comments' product.id product.slug %}">See all comments</a>
     </div>
 
     <!-- Yangi izoh qoldirish formasi -->
     <div class="comment-form">
         <h3>Leave a Comment</h3>
-        <form method="post">
+        <form method="post" action="{% url 'shop:product_detail' product.id product.slug %}">
             {{ comment_form.as_p }}
             {% csrf_token %}
-            <button type="submit">Submit</button>
+            <button type="submit" class="btn btn-outline-success">Submit</button>
+
         </form>
     </div>
 {% endblock %}

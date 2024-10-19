@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category,Product
+from .models import Category,Product,Comment
 from cart.forms import CartAddProductForm
 from .forms import CommentModelForm
 
@@ -65,11 +65,13 @@ def product_detail(request, id, slug):
 
 
 def all_comments(request, id, slug):
-    product = get_object_or_404(Product,id=id,slug=slug,available=True)
-    comments =product.comments.filter(is_active=True)
+    product = get_object_or_404(Product, id=id, slug=slug, available=True)
+    comments = Comment.objects.filter(product=product, is_active=True)
 
-    return render (request, 'shop/product/all_comments.html',
-                   {'product':product,'comments':comments})
+    return render(request, 'shop/product/all_comments.html', {
+        'product': product,
+        'comments': comments
+    })
 
 
 

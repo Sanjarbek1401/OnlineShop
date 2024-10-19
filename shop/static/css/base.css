@@ -395,3 +395,6 @@ form div.field {
     text-decoration: none; /* Remove underlines */
     color: #333; /* Text color */
 }
+.logo img{
+    width: 154px!important;
+}

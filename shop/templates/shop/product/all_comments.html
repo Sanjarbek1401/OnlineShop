@@ -1,4 +1,5 @@
 {% extends "shop/base.html" %}
+
 {% block content %}
     <div class="all-comments">
         <h1>Barcha izohlar: {{ product.name }}</h1>
@@ -7,11 +8,14 @@
                 <div class="comment">
                     <strong>{{ comment.full_name }}</strong>
                     <p>{{ comment.message }}</p>
-                    <small>{{ comment.created }}</small>
+                    <small>{{ comment.created|date:"Y-m-d H:i" }}</small>
                 </div>
             {% empty %}
                 <p>Izohlar mavjud emas.</p>
             {% endfor %}
+        </div>
+        <div class="back-link">
+            <a href="{% url 'shop:product_detail' product.id product.slug %}">Mahsulotga qaytish</a>
         </div>
     </div>
 {% endblock %}
