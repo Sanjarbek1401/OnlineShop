@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyurtmalar Ro'yxati</title>
+    <link rel="stylesheet" href="{% static 'admin_panel/styles.css' %}">
+</head>
+<body>
+    <h1>Buyurtmalar Ro'yxati</h1>
+
+    <!-- Filtr Formasi -->
+    <form method="GET" action="">
+        <label for="status">Status:</label>
+        <select name="status" id="status">
+            <option value="">Barchasi</option>
+            <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Kutilmoqda</option>
+            <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Tugallangan</option>
+            <option value="canceled" {% if request.GET.status == 'canceled' %}selected{% endif %}>Bekor qilingan</option>
+        </select>
+        <button type="submit">Filtrlash</button>
+    </form>
+
+    <!-- Excel eksport qilish tugmasi -->
+    <a href="{% url 'admin_panel:export_orders' %}">Excel formatida eksport qilish</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ism</th>
+                <th>Familya</th>
+                <th>Email</th>
+                <th>Manzil</th>
+                <th>Shahar</th>
+                <th>Status</th>
+                <th>Yaratilgan Vaqti</th>
+                <th>Amallar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.first_name }}</td>
+                <td>{{ order.last_name }}</td>
+                <td>{{ order.email }}</td>
+                <td>{{ order.address }}</td>
+                <td>{{ order.city }}</td>
+                <td>{{ order.get_status_display }}</td> <!-- Statusni ko'rsatadi -->
+                <td>{{ order.created }}</td>
+                <td>
+                    <a href="{% url 'admin_panel:order_edit' order.pk %}">Statusni Yangilash</a><br>
+                    <a href="{% url 'admin_panel:order_detail' order.pk %}">Mahsulotlarni ko'rish</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9">Buyurtmalar topilmadi.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

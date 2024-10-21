@@ -1,4 +1,5 @@
-# admin_panel/urls.py
+# from tkinter.font import names
+from django.contrib.auth import views as auth_views
 from django.urls import path
 from .views import (
     CategoryListView,
@@ -12,7 +13,14 @@ from .views import (
     UserListView,
     UserCreateView,
     UserUpdateView,
-    UserDeleteView
+    UserDeleteView,
+    OrderListView,
+    OrderUpdateView,
+    user_login,
+    dashboard,
+    OrderDetailView,
+    export_orders_to_xlsx
+
 )
 
 app_name = 'admin_panel'
@@ -32,4 +40,16 @@ urlpatterns = [
     path('users/create/', UserCreateView.as_view(), name='user_create'),
     path('users/<int:pk>/edit/', UserUpdateView.as_view(), name='user_edit'),
     path('users/<int:pk>/delete/', UserDeleteView.as_view(), name='user_delete'),
+
+    #For orders
+    path('orders/',OrderListView.as_view(),name='order_list'),
+    path('orders/<int:pk>/', OrderDetailView.as_view(), name='order_detail'),
+    path('orders/edit/<int:pk>/', OrderUpdateView.as_view(), name='order_edit'),
+    path('orders/export/', export_orders_to_xlsx, name='export_orders'),
+
+    # For login
+    path('login/',user_login,name='user_login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('dashboard/', dashboard, name='dashboard')
+
 ]

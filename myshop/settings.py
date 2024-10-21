@@ -23,7 +23,7 @@ CART_SESSION_ID = 'cart'
 SECRET_KEY = 'django-insecure-^wbl-as=!&zm^85cl9g8qpgxqhthy+sx0ump(r!uje0p9%5=w6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -111,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tashkent'  # O'zbekiston vaqti
 
 USE_I18N = True
 
@@ -132,3 +132,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+LOGOUT_REDIRECT_URL = 'login'
+
+LOGIN_URL = 'login'
+
