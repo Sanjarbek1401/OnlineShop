@@ -3,19 +3,20 @@
 {% block title %}
     {{ product.name }}
 {% endblock %}
+
 {% block content %}
     <style>
         .rating {
-            font-size: 20px; /* Yulduzlar o'lchamini o'zgartirish */
-            color: gold; /* Yulduzlar rangini o'zgartirish */
+            font-size: 20px;
+            color: gold;
         }
 
         .star {
-            margin-right: 2px; /* Yulduzlar orasidagi bo'shliq */
+            margin-right: 2px;
         }
 
         .star.filled {
-            color: gold; /* To'ldirilgan yulduz rangini o'zgartirish */
+            color: gold;
         }
 
         .old-price {
@@ -26,6 +27,25 @@
         .discounted-price {
             font-weight: bold;
             color: red;
+        }
+
+        .product-detail {
+            position: relative; /* O'zgaruvchi joylashuv uchun */
+        }
+
+        .like-button {
+            position: absolute; /* Suratning o'ng burchagida joylashishi uchun */
+            top: 10px; /* Yuqoridan masofa */
+            right: 10px; /* O'ngdan masofa */
+            font-size: 24px; /* Yurakcha o'lchamini kattalashtirish */
+            border: none; /* Ramka o'chiriladi */
+            background: transparent; /* Orqa fon o'chiriladi */
+            cursor: pointer; /* Ko'rsatgichni o'zgartirish */
+            transition: color 0.3s; /* Qizarganda yumshoq o'tish */
+        }
+
+        .like-button.liked {
+            color: #ff6961; /* Qizil rangda ko'rsatish */
         }
     </style>
 
@@ -62,12 +82,25 @@
             </div>
         </div>
 
+        <!-- Like tugmasi -->
+        <button class="like-button {% if is_liked %}liked{% endif %}" id="like-button" data-product-id="{{ product.id }}">
+            {% if is_liked %}
+                ❤️
+            {% else %}
+                🤍
+            {% endif %}
+        </button>
+
+        <!-- Like count display -->
+        <p id="likes-count">{{ likes_count }} Likes</p>
+
+        <!-- Savatga qo'shish formasi -->
         <form action="{% url 'cart:cart_add' product.id %}" method="post">
             {{ cart_product_form }}
             {% csrf_token %}
             <button type="submit" class="btn btn-success">Add to cart</button>
-
         </form>
+
         {{ product.description|linebreaks }}
     </div>
 
@@ -82,7 +115,6 @@
         {% empty %}
             <p>No comments yet. Be the first to comment!</p>
         {% endfor %}
-        <!-- To'g'ri URL qo'llanildi -->
         <a href="{% url 'shop:all_comments' product.id product.slug %}">See all comments</a>
     </div>
 
@@ -93,7 +125,34 @@
             {{ comment_form.as_p }}
             {% csrf_token %}
             <button type="submit" class="btn btn-outline-success">Submit</button>
-
         </form>
     </div>
+
+    <!-- Like tugmasi uchun JavaScript qo'shish -->
+    <script>
+        document.getElementById('like-button').addEventListener('click', function() {
+            var likeButton = this;
+            var productId = likeButton.getAttribute('data-product-id');
+
+            fetch("{% url 'shop:product_like' 0 %}".replace('0', productId), {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.liked) {
+                    likeButton.classList.add('liked');
+                    likeButton.innerHTML = '❤️'; // Qizil yurak
+                } else {
+                    likeButton.classList.remove('liked');
+                    likeButton.innerHTML = '🤍'; // Oq yurak
+                }
+                document.getElementById('likes-count').textContent = data.likes_count + ' Likes'; // Update likes count
+            });
+        });
+    </script>
+
 {% endblock %}

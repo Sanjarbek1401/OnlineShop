@@ -1,7 +1,21 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category,Product,Comment
+from .models import Category, Product, Comment
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from cart.forms import CartAddProductForm
 from .forms import CommentModelForm
+
+# Mahsulotlarga like bosish funksiyasi
+@login_required
+def product_like(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if request.user in product.users_like.all():
+        product.users_like.remove(request.user)
+        liked = False
+    else:
+        product.users_like.add(request.user)
+        liked = True
+    return JsonResponse({'liked': liked, 'likes_count': product.users_like.count()})
 
 def product_list(request, category_slug=None):
     category = None
@@ -23,8 +37,6 @@ def product_list(request, category_slug=None):
         'categories': categories,
         'products': products,
     })
-
-
 
 def product_detail(request, id, slug):
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
@@ -61,8 +73,10 @@ def product_detail(request, id, slug):
         'new_comment': new_comment,
         'comment_form': comment_form,
         'total_comments': total_comments,
+        # Yoqtirish qismi uchun qo'shildi
+        'likes_count': product.users_like.count(),
+        'is_liked': request.user in product.users_like.all(),
     })
-
 
 def all_comments(request, id, slug):
     product = get_object_or_404(Product, id=id, slug=slug, available=True)
@@ -72,8 +86,3 @@ def all_comments(request, id, slug):
         'product': product,
         'comments': comments
     })
-
-
-
-
-

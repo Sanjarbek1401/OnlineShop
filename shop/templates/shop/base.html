@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive meta tag -->
     <title>{% block title %}My shop{% endblock %}</title> <!-- Title reverted to original -->
     <link href="{% static 'css/base.css' %}" rel="stylesheet"> <!-- Link to CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
 
 <div id="header">
     <a href="/" class="logo">
-        <img src="{%  static 'img/logo.png'%}" alt="png">
+        <img src="{% static 'img/logo.png' %}" alt="png">
     </a> <!-- Logo -->
 
     <!-- Search Form -->
@@ -21,6 +21,18 @@
             <input type="text" name="q" placeholder="Category name or Product name" value="{{ request.GET.q }}">
             <button type="submit">Search</button>
         </form>
+    </div>
+
+    <!-- Liked Section -->
+    <div class="liked-section">
+        <h4>Your Likes:</h4>
+        <ul id="likes-list">
+            {% for liked_product in liked_products %}
+                <li>{{ liked_product.name }}</li>
+            {% empty %}
+                <li>No liked products yet.</li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 
@@ -44,7 +56,8 @@
     {% block content %}
     {% endblock %}
 </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 </body>
 </html>

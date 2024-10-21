@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kategoriyalar</title>
+    <link rel="stylesheet" href="{% static 'admin_panel/styles.css' %}">  <!-- CSS faylini ulash -->
+</head>
+<body>
+    <h1>Kategoriyalar</h1>
+    <table>
+        <tr>
+            <th>Nom</th>
+            <th>Slug</th>
+            <th>Amallar</th>
+        </tr>
+        {% for category in categories %}
+        <tr>
+            <td>{{ category.name }}</td>
+            <td>{{ category.slug }}</td>
+            <td>
+                <a href="{% url 'admin_panel:category_edit' category.id %}">Tahrir</a> |
+                <a href="{% url 'admin_panel:category_delete' category.id %}">O'chirish</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{% url 'admin_panel:category_create' %}">Yangi Kategoriya Qo'shish</a>
+</body>
+</html>

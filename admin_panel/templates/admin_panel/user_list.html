@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foydalanuvchilar Ro'yxati</title>
+    <link rel="stylesheet" href="{% static 'admin_panel/styles.css' %}">
+</head>
+<body>
+    <h1>Foydalanuvchilar Ro'yxati</h1>
+    <a href="{% url 'admin_panel:user_create' %}">Yangi Foydalanuvchi Qo'shish</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Foydalanuvchi</th>
+                <th>Telefon Raqami</th>
+                <th>Manzil</th>
+                <th>Amallar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.user.username }}</td>
+                <td>{{ user.phone_number }}</td>
+                <td>{{ user.address }}</td>
+                <td>
+                    <a href="{% url 'admin_panel:user_edit' user.pk %}">Tahrir</a> |
+                    <a href="{% url 'admin_panel:user_delete' user.pk %}">O'chirish</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Foydalanuvchilar topilmadi.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

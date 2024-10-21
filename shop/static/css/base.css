@@ -197,18 +197,45 @@ ul.errorlist {
     overflow: hidden;
 }
 
+.product-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
 .product-list .item {
-    width: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 250px;
+    height: 400px;
     padding: 10px 20px 10px 0;
-    float: left;
     text-align: center;
     line-height: 1.2;
 }
 
-.product-list .item img {
-    width: 100%;
+.product-list .item .item-image {
+    height: 100%;
     margin-bottom: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.product-list .item .item-image img {
+    height: 100%;
+    transition: .3s;
+}
+
+.product-list .item img:hover {
+    scale: 1.2;
+}
+
+.product-list .item .text {
+
+}
+
 
 .product-detail {
     text-align: justify;

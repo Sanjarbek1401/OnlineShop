@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kategoriya O'chirish</title>
+    <link rel="stylesheet" href="{% static 'admin_panel/styles.css' %}">
+</head>
+<body>
+    <h1>Kategoriya O'chirish</h1>
+    <p>Siz {{ object.name }} kategoriya o'chirmoqchimisiz?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">O'chirish</button>
+    </form>
+    <a href="{% url 'admin_panel:category_list' %}">Orqaga</a>
+</body>
+</html>

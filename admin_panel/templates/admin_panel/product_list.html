@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahsulotlar Ro'yxati</title>
+    <link rel="stylesheet" href="{% static 'admin_panel/styles.css' %}">
+</head>
+<body>
+    <h1>Mahsulotlar Ro'yxati</h1>
+    <a href="{% url 'admin_panel:product_create' %}">Yangi Mahsulot Qo'shish</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nomi</th>
+                <th>Slug</th>
+                <th>Narxi</th>
+                <th>Chegirma</th>
+                <th>O'zgaruvchan</th>
+                <th>Reyting</th>
+                <th>Yaratilgan</th>
+                <th>Yangilangan</th>
+                <th>Amallar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.slug }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.discount }}%</td>
+                <td>{{ product.available }}</td>
+                <td>{{ product.rating }}</td>
+                <td>{{ product.created }}</td>
+                <td>{{ product.updated }}</td>
+                <td>
+                    <a href="{% url 'admin_panel:product_edit' product.pk %}">Tahrir</a>
+                    <a href="{% url 'admin_panel:product_delete' product.pk %}">O'chirish</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="10">Mahsulotlar topilmadi.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'admin_panel:category_list' %}">Kategoriyalar Ro'yxati</a>
+</body>
+</html>
